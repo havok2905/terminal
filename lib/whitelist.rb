@@ -11,6 +11,8 @@ module Terminal
       "find",
       "cat",
       "open",
+      "|",
+      "&&",
     ]
 
   end
