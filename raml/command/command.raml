@@ -1,0 +1,63 @@
+#%RAML 0.8
+---
+title: Terminal API
+version: v1
+/command/run:
+  post:
+    description: 'send a given command to be parsed, validated, sanatized, and executed'
+    responses:
+      200:
+        body:
+          application/json:
+            schema: !include schemas/output.schema
+            example: |
+              {
+                "command": "ls | grep foobar",
+                "valid": true,
+                "response": {
+                  "type": "directory",
+                  "content" ["foobar/"]
+                }
+              }
+      400:
+        body:
+          application/json:
+            schema: !include schemas/output.schema
+            example: |
+              {
+                "command": "mkdir foobarfoo",
+                "valid": false,
+                "response": {}
+              }
+/command/validate:
+    post:
+      description: 'return if a given command is valid or not'
+      responses:
+        200:
+          body:
+            application/json:
+              schema: !include schemas/validation.schema
+              example: |
+                {
+                  "command": "ls | grep foobar",
+                  "valid": true
+                }
+/command/whitelist:
+    get:
+      description: 'return a list of whitelisted commands'
+      responses:
+        200:
+          body:
+            application/json:
+              schema: !include schemas/whitelist.schema
+              example: |
+                {
+                  "commands": [
+                    "cd",
+                    "ls",
+                    "grep",
+                    "find",
+                    "cat",
+                    "open"
+                  ]
+                }
