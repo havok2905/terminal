@@ -8,5 +8,11 @@ module Terminal
       @parsed_input = parsed_input
     end
 
+    def whitelisted?
+      parsed_input
+        .select { |split| !@whitelist.include? split[:command] }
+        .empty?
+    end
+
   end
 end

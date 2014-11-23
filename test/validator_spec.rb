@@ -24,4 +24,13 @@ describe Terminal::Validator do
     end
   end
 
+  describe 'whitelisted?' do
+    it 'should return true if all commands are whitelisted' do
+      expect(validator.whitelisted?).to eq true
+    end
+
+    it 'should return false if a command is not present in the white list' do
+    end
+  end
+
 end
