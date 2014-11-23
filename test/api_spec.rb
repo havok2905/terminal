@@ -45,7 +45,6 @@ describe Terminal::API do
     it 'should return a list of whitelisted commands' do
       get whitelist
       response = JSON.parse last_response.body
-
       expect(last_response.status).to eq(200)
       expect(response.empty?).to be_falsey
     end
