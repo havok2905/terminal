@@ -1,4 +1,5 @@
 require 'grape'
+require_relative './whitelist.rb'
 
 module Terminal
   class API < Grape::API
@@ -11,18 +12,19 @@ module Terminal
       params do
         requires :input, type: String, desc: 'the string being executed on the terminal'
       end
-      get :run do
+      post :run do
       end
 
       desc 'return if a given command is valid or not'
       params do
         requires :input, type: String, desc: 'the string being executed on the terminal'
       end
-      get :validate do
+      post :validate do
       end
 
       desc 'return a list of whitelisted commands'
       get :whitelist do
+        WhiteList.commands
       end
     end
   end

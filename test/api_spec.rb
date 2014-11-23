@@ -1,5 +1,6 @@
 require_relative '../lib/api.rb'
 require 'rack/test'
+require 'json'
 
 describe Terminal::API do
   include Rack::Test::Methods
@@ -43,6 +44,10 @@ describe Terminal::API do
   describe 'GET /api/v1/command/whitelist' do
     it 'should return a list of whitelisted commands' do
       get whitelist
+      response = JSON.parse last_response.body
+
+      expect(last_response.status).to eq(200)
+      expect(response.empty?).to be_falsey
     end
   end
 
