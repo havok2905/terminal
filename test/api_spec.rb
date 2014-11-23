@@ -13,7 +13,6 @@ describe Terminal::API do
   let(:error)     { '' }
 
   describe 'POST /api/v1/command/run' do
-
     it 'should be successful' do
       post '/api/v1/command/run', command: success
     end
@@ -25,7 +24,19 @@ describe Terminal::API do
     it 'should fail with actual system errors' do
       post '/api/v1/command/run', command: error
     end
+  end
 
+  describe 'POST /api/v1/command/validate' do
+    it 'should be a valid command is all commands are whitelisted' do
+    end
+
+    it 'should not be valid is a command is not whitelisted' do
+    end
+  end
+
+  describe 'GET /api/v1/command/whitelist' do
+    it 'should return a list of whitelisted commands' do
+    end
   end
 
 end
