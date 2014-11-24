@@ -27,7 +27,7 @@ module Terminal
       end
       post :validate do
         status 200
-        parser    = Parser.new @input
+        parser    = Parser.new params[:input]
         whitelist = WhiteList.commands
         validator = Validator.new whitelist, parser.parse
 
