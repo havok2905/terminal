@@ -10,9 +10,7 @@ module Terminal
       "grep",
       "find",
       "cat",
-      "open",
-      "|",
-      "&&",
+      "open"
     ]
 
   end

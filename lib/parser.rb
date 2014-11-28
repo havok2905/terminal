@@ -1,5 +1,3 @@
-require 'pry'
-
 module Terminal
   class Parser
 
