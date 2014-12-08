@@ -1,6 +1,10 @@
 module Terminal
   class Parser
 
+    require 'pry'
+    require_relative './exceptions.rb'
+    require_relative './whitelist.rb'
+
     attr_reader :input, :response
 
     def initialize(input)
@@ -8,29 +12,58 @@ module Terminal
       @response = []
     end
 
+    def command?(entry)
+      /[a-zA-Z0-9-_]+/.match(entry)
+    end
+
+    def argument?(entry)
+      /.*/.match(entry)
+    end
+
     def flag?(entry)
-      /^-{1}[a-zA-Z0-9]+$/.match(entry)
+      /-{1}[a-zA-Z0-9]+/.match(entry)
     end
 
     def key_value_pair?(entry)
-      /^-{2}[a-zA-Z0-9]+={1}.*+$/.match(entry)
+      /-{2}[a-zA-Z0-9-_]+={1}[a-zA-Z0-9-_.]+/.match(entry)
     end
 
-    def command_split(entry)
-      /([a-zA-Z0-9]+){1} (.*) ((?:&{2}|\|{1}))/.match(entry)
+    def control_flow?(entry)
+      /(?:&{2}|\|{1})/.match(entry)
+    end
+
+    def command_hash
+      {
+        name: nil,
+        flags: [],
+        pairs: [],
+        argument: nil,
+        control: nil
+      }
     end
 
     def parse
-
       parsed_input = []
+      index = 0
 
-      while input
-        command = command_split input
-        # build new array off the matched data to push to parsed input
-        # get the complete string from the matched data
-        # replace that matched string with nil in the input string
-        # the end case is the input string being nil or not matching any methods any more
-          # That will eventually return an exception
+      input.split.each do |entry|
+        if command? entry && parsed_input[index][:name].present?
+          unless WhiteList.commands.include? entry
+            parsed_input[index] = command_hash
+            parsed_input[index][:name] = entry
+          else
+            raise BlackListedCommandException
+          end
+        elsif flag? entry
+          parsed_input[index][:flags].push entry
+        elsif key_value_pair? entry
+          parsed_input[index][:pairs].push entry
+        elsif control_flow? entry
+          parsed_input[index][:control] = entry
+          index++
+        elsif argument? entry
+          parsed_input[index][:argument] = entry
+        end
       end
 
       parsed_input
