@@ -1,7 +1,6 @@
 module Terminal
   class Parser
 
-    require 'pry'
     require_relative './exceptions.rb'
     require_relative './whitelist.rb'
 
